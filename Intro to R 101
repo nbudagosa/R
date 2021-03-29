@@ -1,0 +1,99 @@
+## this is a comment
+print("Hello World")
+print("I am learning R programming !!")
+
+## create variables
+income <- 50000
+expense <- 32000
+saving <- income - expense
+print(saving)
+
+## print statement/ text 
+cat("My saving this month:", saving)
+
+## remove / delete object (variable)
+rm(expense)
+rm(income)
+
+## variable name - snake case
+my_name <- "Toy"
+my_favourite_book <- "R for Data Science"
+
+## class - data types
+my_name <- "Toy"
+my_age <- 32
+is_male <- TRUE 
+
+## check class
+class(my_name)
+class(my_age)
+class(is_male)
+
+## logical
+1 + 1 == 2 ## equal
+100 + 200 == 320
+5 > 2
+4 * 3 != 12 ## not equal
+100 >= 1000
+6 <= 10
+
+## R is case-sensitive
+"Hello" == "Hello"
+
+## Data Structures
+## 1. Vector
+## 2. Matrix
+## 3. List
+## 4. DataFrame
+
+## create vector
+friends <- c("Toy", "Top", "Wan", "Zue", "Ink")
+ages <- c(32, 27, 26, 34, 28)
+gender <- c("M", "M", "F", "M", "F")
+
+gender <- factor(gender)
+
+## matrix
+m1 <- matrix(1:20, ncol = 5, byrow = TRUE)
+
+## list
+my_list <- list(artist = "Lauv & LANY",
+                song = "Mean It",
+                year = 2020,
+                like = 600000,
+                is_male = TRUE,
+                my_matrix = m1,
+                friends = friends)
+
+my_list$artist
+my_list$year
+my_list$my_matrix
+
+## dataframe
+friends <- c("Toy", "Top", "Wan", "Zue", "Ink")
+ages <- c(32, 27, 26, 34, 28)
+gender <- c("M", "M", "F", "M", "F")
+
+length(friends)
+length(gender)
+
+## create dataframe
+df <- data.frame(friends, ages, gender)
+
+View(df)
+
+## function
+
+heights <- c(176, 180, 165, 140, 169, 154)
+length(heights)
+
+mean(heights)
+sum(heights) / length(heights)
+
+mean(heights) == sum(heights)/ length(heights)
+
+## create your own function
+greeting <- function() print("Hello World")
+
+## create add_two_nums
+add_two_nums <- function(val1, val2) val1 + val2

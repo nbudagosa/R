@@ -1,0 +1,134 @@
+## get working directory
+getwd()
+
+## library tidyverse
+library(tidyverse)
+
+## basic plots (base R)
+
+hist(mtcars$mpg)
+
+## Analyzing horse power
+## Histogram - One Quantitative Variable
+hist(mtcars$hp)
+mean(mtcars$hp)
+median(mtcars$hp)
+
+str(mtcars)
+mtcars$am <- factor(mtcars$am,
+                    levels = c(0,1),
+                    labels = c("Auto", "Manual"))
+
+## Bar Plot - One Qualitative Variable
+barplot(table(mtcars$am))
+
+## Box Plot
+boxplot(mtcars$hp)
+fivenum(mtcars$hp)
+min(mtcars$hp)
+quantile(mtcars$hp, probs = c(.25, .5, .75))
+max(mtcars$hp)
+
+## Whisker Calculation
+Q3 <- quantile(mtcars$hp, probs = .75)
+Q1 <- quantile(mtcars$hp, probs = .25)
+IQR_hp <- Q3 - Q1
+
+Q3 + 1.5*IQR_hp
+Q1 - 1.5*IQR_hp
+
+boxplot.stats(mtcars$hp, coef = 1.5)
+
+## filter out outliers
+mtcars_no_out <- mtcars %>%
+  filter(hp < 335)
+
+boxplot(mtcars_no_out$hp)
+
+## Boxplot 2 Variables
+## Qualitative x Quantitative 
+data(mtcars)
+mtcars$am <- factor(mtcars$am,
+                    levels = c(0,1),
+                    labels = c("Auto", "Manual"))
+boxplot(mpg ~ am, data = mtcars, 
+        col = c("gold", "salmon"))
+
+## Scatter Plot
+## 2 x Quantitative
+plot(mtcars$hp, mtcars$mpg, pch = 16, 
+     col="blue",
+     main = "Relationship between HP and MPG",
+     xlab = "Horse Power",
+     ylab = "Miles Per Gallon")
+
+
+cor(mtcars$hp, mtcars$mpg)
+lm(mpg ~ hp, data = mtcars)
+
+
+
+
+
+
+
+
+## ggplot2
+## library tidyverse
+library(tidyverse)
+
+## First Plot
+ggplot(data = mtcars, mapping = aes(x = hp, y = mpg)) +
+  geom_point() +
+  geom_smooth() +
+  geom_rug()
+
+ggplot(mtcars, aes(hp, mpg)) +
+  geom_point(size = 3, col = "blue", alpha = 0.2)
+
+ggplot(mtcars, aes(hp)) +
+  geom_histogram(bins = 10, fill = "red", alpha = 0.5)
+
+ggplot(mtcars, aes(hp)) +
+  geom_boxplot()
+
+p <- ggplot(mtcars, aes(hp))
+p + geom_histogram(bins = 10)
+p + geom_density()
+p + geom_boxplot()
+
+## Box plot by groups
+diamonds %>%
+  count(cut)
+  
+ggplot(diamonds, aes(cut)) +
+  geom_bar(fill = "#0366fc")
+
+ggplot(diamonds, mapping = aes(cut, fill=color)) +
+  geom_bar(position = "fill")
+
+#### SCATTER PLOT
+set.seed(99)
+small_diamonds <- sample_n(diamonds, 5000)
+
+ggplot(small_diamonds, aes(carat, price)) +
+  geom_point()
+
+#### FACET : small multiples
+ggplot(small_diamonds, aes(carat, price)) +
+  geom_point() +
+  geom_smooth(method = "lm", col="red") +
+  facet_wrap(~color, ncol=2) +
+  theme_minimal() +
+  labs(title = "Relationship between carat and price by color",
+       x = "Carat",
+       y = "Price USD",
+       caption = "Source: Diamonds from ggplot2 package")
+
+#### Final Example
+ggplot(small_diamonds, aes(carat, price, col=cut)) +
+  geom_point(size = 3, alpha = 0.2) +
+  facet_wrap(~ color, ncol=2) +
+  theme_minimal()
+
+help(package="rgl")

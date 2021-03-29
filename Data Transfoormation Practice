@@ -1,0 +1,102 @@
+## Data Transformation / Data Wrangling
+
+## install.packages("tidyverse", dependencies = TRUE)
+
+## load library
+library(tidyverse)
+
+## read data files
+friends <- read_csv("friends.csv")
+df1 <- read_delim("text_file_01.txt", delim = ";")
+df2 <- read_delim("text_file_02.txt", delim = "\t")
+
+## tibble == enhanced dataframe
+mtcars <- tibble(mtcars)
+class(mtcars)
+
+## dplyr - data transformation
+## 1. select()
+## 2. filter()
+## 3. mutate()
+## 4. arrange()
+## 5. summarise()
+## 6. group_by()
+## 7. count()
+
+## select columns
+select(mtcars, mpg, hp, wt)
+select(mtcars, 1, 2, 4, 6)
+select(mtcars, 1:3, 8:10)
+
+select(mtcars, starts_with("h"))
+select(mtcars, contains("a"))
+select(mtcars, ends_with("p"))
+select(mtcars, carb, am, everything())
+
+select(mtcars, horsePower = hp, 
+               milePerGallon = mpg,
+               weight = wt)
+
+## filter rows with conditions
+filter(mtcars, mpg < 20)
+filter(mtcars, mpg < 20 , hp > 200 , am == 1)
+filter(mtcars, mpg < 18 | am == 1)
+
+## combine select + filter
+mtcars %>%
+  select(mpg, hp, wt) %>%
+  filter(mpg < 20, hp > 200) %>%
+  mutate(double_hp = hp*2,
+         log_hp = log(hp),
+         exp_log_hp = exp(log_hp))
+
+## arrange data
+mtcars %>%
+  select(mpg, hp, wt) %>%
+  arrange( desc(hp) )
+
+mtcars %>%
+  select(mpg, hp, wt, am) %>%
+  mutate( am = factor(am,
+                      levels = c(0, 1),
+                      labels = c("Auto", "Manual")) ) %>%
+  arrange( desc(am), desc(hp) ) 
+
+## summarise 
+mtcars %>%
+  mutate(am = factor(am, 
+                     levels=c(0,1), 
+                     labels=c("Auto", "Manual"))) %>%
+  group_by(am) %>%
+  summarise(avg_mpg = mean(mpg), sd_mpg = sd(mpg)) %>%
+  ungroup()
+
+## diamonds
+result <- diamonds %>%
+  count(cut, color) %>%
+  mutate( percent = n / sum(n)) %>%
+  as.data.frame() %>%
+  arrange( desc(percent) ) %>%
+  head(10)
+  
+## export data to csv file
+write_csv(result, "top_ten_diamonds.csv")
+  
+## join tables
+band_members
+band_instruments  
+  
+inner_join(band_members, band_instruments, by="name")
+left_join(band_members, band_instruments, by="name")
+full_join(band_members, band_instruments, by="name")  
+
+band_members %>%
+  inner_join(band_instruments, by="name")
+
+## add grand total
+df1 <- diamonds %>%
+  count(cut)
+
+df2 <- data.frame(cut = "Total", n = length(diamonds$cut))
+
+df1 %>% bind_rows(df2)

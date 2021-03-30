@@ -132,3 +132,32 @@ ggplot(small_diamonds, aes(carat, price, col=cut)) +
   theme_minimal()
 
 help(package="rgl")
+
+
+
+
+
+
+
+
+
+
+# basic plots in base R
+hist(mtcars$mpg)
+boxplot(mtcars$mpg)
+boxplot(mpg ~ am, data = mtcars)
+barplot(table(mtcars$am))
+plot(mtcars$hp, mtcars$mpg, pch=16)
+
+
+
+
+
+
+
+# ggplot template
+library(tidyverse)
+ggplot(data = mtcars, mapping = aes(x = hp, y = mpg)) + 
+    geom_point() +
+    geom_smooth() + 
+    geom_rug()

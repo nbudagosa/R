@@ -1,0 +1,215 @@
+## load library
+## install.packages(“mlbench”)
+library(mlbench)
+library(tidyverse)
+## load dataset for regression
+data(“BostonHousing”)
+glimpse(BostonHousing)
+## load dataset for classification
+data(“PimaIndiansDiabetes”)
+glimpse(PimaIndiansDiabetes)
+
+
+
+
+model <- train(form = y ~ . ,
+data = train_data ,
+method = “lm” )
+
+
+
+
+point_1 <- c(2,3)
+point_2 <- c(6,8)
+d <- sqrt( (2-6)**2 + (3-8)**2 )
+print(d)
+
+
+
+
+## split data
+set.seed(99)
+n <- nrow(BostonHousing)
+id <- sample(n, size = n*0.75, replace=FALSE)
+train_data <- BostonHousing[id, ]
+test_data <- BostonHousing[-id, ]
+
+
+
+
+
+## train model
+set.seed(99)
+knn_model <- train(medv ~ .,
+data = train_data,
+method = "knn")
+## test model
+p <- predict(knn_model, newdata = test_data)
+## rmse
+rmse <- sqrt(mean((p - test_data$medv)**2))
+
+
+
+
+
+## train model
+set.seed(99)
+ctrl <- trainControl(method = “cv”, number = 5, verboseIter = TRUE)
+knn_model <- train(medv ~ .,
+data = train_data,
+method = "knn",
+trControl = ctrl)
+## test model
+p <- predict(knn_model, newdata = test_data)
+## rmse
+rmse <- sqrt(mean((p - test_data$medv)**2))
+
+
+
+
+
+## train model
+set.seed(99)
+ctrl <- trainControl(method = “cv”, number = 5, verboseIter = TRUE)
+knn_model <- train(medv ~ .,
+data = train_data,
+tuneLength = 5,
+method = "knn",
+trControl = ctrl)
+## test model
+p <- predict(knn_model, newdata = test_data)
+## rmse
+rmse <- sqrt(mean((p - test_data$medv)**2))
+
+
+
+
+
+## create grid
+myGrid <- expand.grid(k = 1:10)
+## train model
+set.seed(99)
+ctrl <- trainControl(method = “cv”, number = 5, verboseIter = TRUE)
+knn_model <- train(medv ~ .,
+data = train_data,
+tuneGrid = myGrid,
+method = "knn",
+trControl = ctrl)
+## test model
+p <- predict(knn_model, newdata = test_data)
+## rmse
+rmse <- sqrt(mean((p - test_data$medv)**2))
+
+
+
+
+
+
+## Classification
+set.seed(42)
+ctrl <- trainControl(method = “cv”,
+number = 5)
+model <- train(
+y ~ .,
+data = df,
+method = “knn”,
+metric = “Accuracy”,
+trControl = ctrl
+)
+
+
+
+
+
+
+## Regression
+set.seed(42)
+ctrl <- trainControl(method = “cv”,
+number = 5)
+model <- train(
+y ~ .,
+data = df,
+method = “knn”,
+metric = “RMSE”,
+trControl = ctrl
+)
+
+
+
+
+
+
+##Classification - ROC Sens Specs
+set.seed(42)
+ctrl <- trainControl(
+method = “cv”,
+number = 5,
+summaryFunction = twoClassSummary,
+classProbs = TRUE)
+model <- train(
+y ~ .,
+data = df,
+method = “knn”,
+metric = “ROC”,
+trControl = ctrl
+)
+
+##Classification - AUC Precision Recall F1
+set.seed(42)
+ctrl <- trainControl(
+method = “cv”,
+number = 5,
+summaryFunction = prSummary,
+classProbs = TRUE)
+model <- train(
+y ~ .,
+data = df,
+method = “knn”,
+metric = “AUC”,
+trControl = ctrl
+)
+
+
+
+
+
+
+## Build linear regression in R
+## train model with train_data
+set.seed(99)
+lm_model <- train(medv ~ rm + indus + crim,
+data = train_data,
+method = "lm")
+## test model (predict test data)
+p <- predict(lm_model, newdata = test_data)
+rmse <- sqrt(mean( (p - test_data$medv)** 2 ))
+
+
+
+
+## Linear regression with K-Fold
+## train model with train_data
+set.seed(99)
+ctrl <- trainControl(method = “cv”, number = 5,
+verboseIter = TRUE)
+lm_model <- train(medv ~ rm + indus + crim,
+data = train_data,
+method = "lm",
+trControl = ctrl)
+## test model (predict test data)
+p <- predict(lm_model, newdata = test_data)
+rmse <- sqrt(mean( (p - test_data$medv)** 2 ))
+
+
+
+## train model with train_data
+set.seed(99)
+ctrl <- trainControl(method = “cv”, number = 5,
+verboseIter = TRUE)
+logistic_model <- train(diabetes ~ .,
+data = train_data,
+method = "glm",
+trControl = ctrl)
+## test model (predict test data)
+p <- predict(logistic_model, newdata = test_data)
+accuracy <- mean(p == test_data$diabetes)

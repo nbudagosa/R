@@ -3,10 +3,10 @@
 library(mlbench)
 library(tidyverse)
 ## load dataset for regression
-data(“BostonHousing”)
+data(BostonHousing)
 glimpse(BostonHousing)
 ## load dataset for classification
-data(“PimaIndiansDiabetes”)
+data(PimaIndiansDiabetes)
 glimpse(PimaIndiansDiabetes)
 
 
